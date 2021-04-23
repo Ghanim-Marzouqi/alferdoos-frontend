@@ -17,24 +17,28 @@ import StudentRegistration from '../pages/parent/StudentRegistration';
 
 const authRoutes = [
   {
+    title: "تسجيل الدخول",
     path: "/login",
     component: Login,
     layout: "/auth",
     icon: null
   },
   {
+    title: "تسجيل جديد",
     path: "/registration",
     component: Registration,
     layout: "/auth",
     icon: null
   },
   {
+    title: "نسيان كلمة المرور",
     path: "/forget-password",
     component: ForgetPassword,
     layout: "/auth",
     icon: null
   },
   {
+    title: "إعادة تعيين كلمة المرور",
     path: "/reset-password",
     component: ResetPassword,
     layout: "/auth",
@@ -44,6 +48,7 @@ const authRoutes = [
 
 const adminRoutes = [
   {
+    title: "الرئيسية",
     path: "/dashboard",
     component: Dashboard,
     layout: "/admin",
@@ -53,6 +58,7 @@ const adminRoutes = [
 
 const teacherRoutes = [
   {
+    title: "تسجيل الحضور",
     path: "/attendance-registration",
     component: AttendanceRegistration,
     layout: "/teacher",
@@ -62,6 +68,7 @@ const teacherRoutes = [
 
 const parentRoutes = [
   {
+    title: "تسجيل طالب جديد",
     path: "/student-registration",
     component: StudentRegistration,
     layout: "/parent",
