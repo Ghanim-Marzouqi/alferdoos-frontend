@@ -1,4 +1,11 @@
-import { DashboardOutlined, EditOutlined } from '@material-ui/icons';
+import {
+  DashboardOutlined,
+  EditOutlined,
+  SchoolOutlined,
+  AssignmentOutlined,
+  DescriptionOutlined,
+  PeopleAltOutlined
+} from '@material-ui/icons';
 
 // auth pages
 import Login from '../pages/Login';
@@ -8,6 +15,9 @@ import ResetPassword from '../pages/ResetPassword';
 
 // admin pages
 import Dashboard from '../pages/admin/Dashboard';
+import RegistrationRequests from '../pages/admin/RegistrationRequests';
+import Exams from '../pages/admin/Exams';
+import StudentList from '../pages/admin/StudentList';
 
 // teacher pages
 import AttendanceRegistration from '../pages/teacher/AttendanceRegistration';
@@ -52,7 +62,36 @@ const adminRoutes = [
     path: "/dashboard",
     component: Dashboard,
     layout: "/admin",
-    icon: DashboardOutlined
+    icon: <DashboardOutlined color="primary" />
+  },
+  {
+    title: "الطلاب",
+    path: "/students",
+    layout: "/admin",
+    icon: <SchoolOutlined color="primary" />,
+    children: [
+      {
+        title: "طلبات التسجيل",
+        path: "/registration-requests",
+        layout: "/admin",
+        icon: <AssignmentOutlined color="primary" />,
+        component: RegistrationRequests,
+      },
+      {
+        title: "الإختبارات",
+        path: "/exams",
+        layout: "/admin",
+        icon: <DescriptionOutlined color="primary" />,
+        component: Exams
+      },
+      {
+        title: "الطلاب المقبولين",
+        path: "/student-list",
+        layout: "/admin",
+        icon: <PeopleAltOutlined color="primary" />,
+        component: StudentList
+      }
+    ]
   }
 ];
 
@@ -62,7 +101,7 @@ const teacherRoutes = [
     path: "/attendance-registration",
     component: AttendanceRegistration,
     layout: "/teacher",
-    icon: EditOutlined
+    icon: <EditOutlined color="primary" />
   }
 ];
 
@@ -72,7 +111,7 @@ const parentRoutes = [
     path: "/student-registration",
     component: StudentRegistration,
     layout: "/parent",
-    icon: EditOutlined
+    icon: <EditOutlined color="primary" />
   }
 ];
 
