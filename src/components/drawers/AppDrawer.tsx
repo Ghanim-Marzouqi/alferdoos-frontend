@@ -135,28 +135,71 @@ const AppDrawer: React.FC<Props> = ({
             </div>
             <List>
               {drawerItems.map((item, i) => (
-                <ListItem
-                  button
-                  key={item.title}
-                  className={classes.listItem}
-                  activeClassName="Mui-selected"
-                  component={NavLink}
-                  to={item.route}
-                  exact
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    className={classes.drawerTitle}
-                  />
-                  {item.notifications > 0 && (
-                    <ListItemSecondaryAction>
-                      <Avatar className={classes.notification}>
-                        {item.notifications}
-                      </Avatar>
-                    </ListItemSecondaryAction>
-                  )}
-                </ListItem>
+                item.hasChildren ?
+                  <React.Fragment key={i}>
+                    <ListItem
+                      button
+                      key={item.title}
+                      className={classes.listItem}
+                      onClick={toggleCollapse}
+                    >
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        className={classes.drawerTitle}
+                      />
+                      {collapse ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    <Collapse in={collapse} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {item.children?.map((childItem, i) =>
+                          <ListItem
+                            key={i}
+                            button
+                            className={classes.listItem}
+                            activeClassName="Mui-selected"
+                            component={NavLink}
+                            to={childItem.route}
+                            exact
+                          >
+                            <ListItemIcon>{childItem.icon}</ListItemIcon>
+                            <ListItemText
+                              primary={childItem.title}
+                              className={classes.drawerTitle}
+                            />
+                            {childItem.notifications > 0 && (
+                              <ListItemSecondaryAction>
+                                <Avatar className={classes.notification}>
+                                  {childItem.notifications}
+                                </Avatar>
+                              </ListItemSecondaryAction>
+                            )}
+                          </ListItem>)}
+                      </List>
+                    </Collapse>
+                  </React.Fragment> :
+                  <ListItem
+                    button
+                    key={item.title}
+                    className={classes.listItem}
+                    activeClassName="Mui-selected"
+                    component={NavLink}
+                    to={item.route}
+                    exact
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText
+                      primary={item.title}
+                      className={classes.drawerTitle}
+                    />
+                    {item.notifications > 0 && (
+                      <ListItemSecondaryAction>
+                        <Avatar className={classes.notification}>
+                          {item.notifications}
+                        </Avatar>
+                      </ListItemSecondaryAction>
+                    )}
+                  </ListItem>
               ))}
             </List>
           </div>

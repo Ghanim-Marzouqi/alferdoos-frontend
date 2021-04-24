@@ -3,7 +3,7 @@ import React from 'react';
 const StudentList: React.FC = () => {
   return (
     <div>
-      <h1>Student List Page</h1>
+      <h1>الطلاب المسجلين</h1>
     </div>
   )
 }
