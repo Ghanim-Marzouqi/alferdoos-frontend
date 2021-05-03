@@ -120,7 +120,7 @@ const AppDrawer: React.FC<Props> = ({
                   alt="Avatar"
                 />
                 <Typography variant="body2" component="h1">
-                  غانم المرزوقي
+                  أسم المستخدم
                 </Typography>
                 <Button
                   variant="text"
