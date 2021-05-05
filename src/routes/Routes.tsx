@@ -79,7 +79,7 @@ const authRoutes = [
   },
   {
     title: "إعادة تعيين كلمة المرور",
-    path: "/reset-password",
+    path: "/reset-password/:token",
     component: ResetPassword,
     layout: "/auth",
     icon: null

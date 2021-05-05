@@ -1,25 +1,21 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import {
   Avatar,
   Button,
-  Collapse,
   Drawer,
   Hidden,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemSecondaryAction,
   SvgIconProps,
   Typography
 } from '@material-ui/core';
-import { AccountCircle, ExpandLess, ExpandMore } from '@material-ui/icons';
+import { AccountCircle } from '@material-ui/icons';
 
 import { DRAWER_WIDTH } from '../../config/Constants';
 import AvatarImage from '../../assets/images/avatar.jpeg';
 import Colors from '../../config/Colors';
+import DrawerOption from './AppDrawerOption';
+import DrawerMuliOptions from './AppDrawerMuliOptions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -92,11 +88,6 @@ const AppDrawer: React.FC<Props> = ({
   handleProfileButtonClick
 }) => {
   const classes = useStyles();
-  const [collapse, setCollapse] = useState(false);
-
-  const toggleCollapse = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setCollapse(!collapse);
-  };
 
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
@@ -135,71 +126,7 @@ const AppDrawer: React.FC<Props> = ({
             </div>
             <List>
               {drawerItems.map((item, i) => (
-                item.hasChildren ?
-                  <React.Fragment key={i}>
-                    <ListItem
-                      button
-                      key={item.title}
-                      className={classes.listItem}
-                      onClick={toggleCollapse}
-                    >
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText
-                        primary={item.title}
-                        className={classes.drawerTitle}
-                      />
-                      {collapse ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={collapse} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        {item.children?.map((childItem, i) =>
-                          <ListItem
-                            key={i}
-                            button
-                            className={classes.listItem}
-                            activeClassName="Mui-selected"
-                            component={NavLink}
-                            to={childItem.route}
-                            exact
-                          >
-                            <ListItemIcon>{childItem.icon}</ListItemIcon>
-                            <ListItemText
-                              primary={childItem.title}
-                              className={classes.drawerTitle}
-                            />
-                            {childItem.notifications > 0 && (
-                              <ListItemSecondaryAction>
-                                <Avatar className={classes.notification}>
-                                  {childItem.notifications}
-                                </Avatar>
-                              </ListItemSecondaryAction>
-                            )}
-                          </ListItem>)}
-                      </List>
-                    </Collapse>
-                  </React.Fragment> :
-                  <ListItem
-                    button
-                    key={item.title}
-                    className={classes.listItem}
-                    activeClassName="Mui-selected"
-                    component={NavLink}
-                    to={item.route}
-                    exact
-                  >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText
-                      primary={item.title}
-                      className={classes.drawerTitle}
-                    />
-                    {item.notifications > 0 && (
-                      <ListItemSecondaryAction>
-                        <Avatar className={classes.notification}>
-                          {item.notifications}
-                        </Avatar>
-                      </ListItemSecondaryAction>
-                    )}
-                  </ListItem>
+                item.hasChildren ? <DrawerMuliOptions key={i} item={item} /> : <DrawerOption key={i} item={item} />
               ))}
             </List>
           </div>
@@ -221,7 +148,7 @@ const AppDrawer: React.FC<Props> = ({
                   alt="Avatar"
                 />
                 <Typography variant="body2" component="h1">
-                  غانم المرزوقي
+                  أسم المستخدم
                 </Typography>
                 <Button
                   variant="text"
@@ -236,71 +163,7 @@ const AppDrawer: React.FC<Props> = ({
             </div>
             <List>
               {drawerItems.map((item, i) => (
-                item.hasChildren ?
-                  <React.Fragment key={i}>
-                    <ListItem
-                      button
-                      key={item.title}
-                      className={classes.listItem}
-                      onClick={toggleCollapse}
-                    >
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText
-                        primary={item.title}
-                        className={classes.drawerTitle}
-                      />
-                      {collapse ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={collapse} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        {item.children?.map((childItem, i) =>
-                          <ListItem
-                            key={i}
-                            button
-                            className={classes.listItem}
-                            activeClassName="Mui-selected"
-                            component={NavLink}
-                            to={childItem.route}
-                            exact
-                          >
-                            <ListItemIcon>{childItem.icon}</ListItemIcon>
-                            <ListItemText
-                              primary={childItem.title}
-                              className={classes.drawerTitle}
-                            />
-                            {childItem.notifications > 0 && (
-                              <ListItemSecondaryAction>
-                                <Avatar className={classes.notification}>
-                                  {childItem.notifications}
-                                </Avatar>
-                              </ListItemSecondaryAction>
-                            )}
-                          </ListItem>)}
-                      </List>
-                    </Collapse>
-                  </React.Fragment> :
-                  <ListItem
-                    button
-                    key={item.title}
-                    className={classes.listItem}
-                    activeClassName="Mui-selected"
-                    component={NavLink}
-                    to={item.route}
-                    exact
-                  >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText
-                      primary={item.title}
-                      className={classes.drawerTitle}
-                    />
-                    {item.notifications > 0 && (
-                      <ListItemSecondaryAction>
-                        <Avatar className={classes.notification}>
-                          {item.notifications}
-                        </Avatar>
-                      </ListItemSecondaryAction>
-                    )}
-                  </ListItem>
+                item.hasChildren ? <DrawerMuliOptions key={i} item={item} /> : <DrawerOption key={i} item={item} />
               ))}
             </List>
           </div>

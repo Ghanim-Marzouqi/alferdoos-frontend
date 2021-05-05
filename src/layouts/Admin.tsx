@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import {
   AppBar,
   Button,
@@ -29,6 +29,7 @@ type RouteType = {
 
 const Admin: React.FC<Props> = ({ container }) => {
   const classes = useStyles();
+  const history = useHistory();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const flatArray = (array: RouteType[]) => {
@@ -63,11 +64,14 @@ const Admin: React.FC<Props> = ({ container }) => {
   }
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+
   const handleProfileButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
   };
+
   const handleLogoutButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
+    history.replace('/auth');
   };
 
   return (
