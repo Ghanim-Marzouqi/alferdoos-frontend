@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import {
   AppBar,
   Button,
@@ -7,11 +7,12 @@ import {
   IconButton,
   Toolbar,
   Typography
-} from "@material-ui/core";
+} from '@material-ui/core';
 import { Menu, PowerSettingsNew } from '@material-ui/icons';
 
-import { useStyles } from './BaseStyles';
+import Profile from '../pages/auth/Profile';
 import Drawer from '../components/drawers/AppDrawer';
+import { useStyles } from './BaseStyles';
 import { adminRoutes } from '../routes/Routes';
 
 type Props = {
@@ -67,6 +68,7 @@ const Admin: React.FC<Props> = ({ container }) => {
 
   const handleProfileButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
+    history.push("/admin/profile");
   };
 
   const handleLogoutButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -95,7 +97,7 @@ const Admin: React.FC<Props> = ({ container }) => {
             noWrap
           >
             مركز الفردوس الأعلى
-            </Typography>
+          </Typography>
           <Button
             endIcon={<PowerSettingsNew />}
             color="inherit"
@@ -117,6 +119,7 @@ const Admin: React.FC<Props> = ({ container }) => {
         <div className={classes.toolbar} />
         <Switch>
           {getRoutes()}
+          <Route path="/admin/profile" component={Profile} />
           <Redirect from="/admin" to="/admin/dashboard" />
         </Switch>
       </main>

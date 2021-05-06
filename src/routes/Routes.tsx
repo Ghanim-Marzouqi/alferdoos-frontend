@@ -21,38 +21,50 @@ import {
   InsertDriveFileOutlined,
   MenuBookOutlined,
   BookOutlined,
-  EventOutlined
+  EventOutlined,
+  AccountCircleOutlined,
+  PrintOutlined
 } from '@material-ui/icons';
 
-// auth pages
-import Login from '../pages/Login';
-import Registration from '../pages/Registration';
-import ForgetPassword from '../pages/ForgetPassword';
-import ResetPassword from '../pages/ResetPassword';
+// **************** AUTH PAGES *********************
+import Login from '../pages/auth/Login';
+import Registration from '../pages/auth/Registration';
+import ForgetPassword from '../pages/auth/ForgetPassword';
+import ResetPassword from '../pages/auth/ResetPassword';
 
-// admin pages
-import Dashboard from '../pages/admin/Dashboard';
-import RegistrationRequests from '../pages/admin/RegistrationRequests';
-import Exams from '../pages/admin/Exams';
-import StudentList from '../pages/admin/StudentList';
-import TeacherList from '../pages/admin/TeacherList';
-import GroupList from '../pages/admin/GroupList';
-import Timetable from '../pages/admin/Timetable';
-import AttendanceReport from '../pages/admin/AttendanceReport';
-import Activities from '../pages/admin/Activities';
-import Correspondences from '../pages/admin/Correspondences';
-import Expenses from '../pages/admin/Expenses';
-import MeetingReports from '../pages/admin/MeetingReports';
-import AcademicYear from '../pages/admin/AcademicYear';
-import ExamPreparation from '../pages/admin/ExamPreparation';
-import MemorizationPreparation from '../pages/admin/MemorizationPreparation';
-import SubjectPreparation from '../pages/admin/SubjectPreparation';
-import TimetablePreparation from '../pages/admin/TimetablePreparation';
+// **************** ADMIN PAGES ********************
+import AdminDashboard from '../pages/admin/Dashboard';
+// student page list
+import RegistrationRequests from '../pages/admin/students/RegistrationRequests';
+import Exams from '../pages/admin/students/Exams';
+import StudentList from '../pages/admin/students/StudentList';
+// teacher page list
+import TeacherList from '../pages/admin/teachers/TeacherList';
+// group page list
+import GroupList from '../pages/admin/groups/GroupList';
+import Timetable from '../pages/admin/groups/Timetable';
+import AttendanceReport from '../pages/admin/groups/AttendanceReport';
+import Activities from '../pages/admin/groups/Activities';
+// tools page list
+import Correspondences from '../pages/admin/tools/Correspondences';
+import Expenses from '../pages/admin/tools/Expenses';
+import MeetingReports from '../pages/admin/tools/MeetingReports';
+// reports page list
+import StudentReports from '../pages/admin/reports/StudentReports';
+// settings page list
+import AcademicYear from '../pages/admin/settings/AcademicYear';
+import ExamPreparation from '../pages/admin/settings/ExamPreparation';
+import GroupPreparation from '../pages/admin/settings/GroupPreparation';
+import MemorizationPreparation from '../pages/admin/settings/MemorizationPreparation';
+import SubjectPreparation from '../pages/admin/settings/SubjectPreparation';
+import TimetablePreparation from '../pages/admin/settings/TimetablePreparation';
+import UserPermissions from '../pages/admin/settings/UserPermissions';
 
-// teacher pages
+// ****************** TEACHER PAGES *********************
+import TeacherDashboard from '../pages/teacher/Dashboard';
 import AttendanceRegistration from '../pages/teacher/AttendanceRegistration';
 
-// parent pages
+// ****************** PARENT PAGES **********************
 import StudentRegistration from '../pages/parent/StudentRegistration';
 
 const authRoutes = [
@@ -90,7 +102,7 @@ const adminRoutes = [
   {
     title: "الرئيسية",
     path: "/dashboard",
-    component: Dashboard,
+    component: AdminDashboard,
     layout: "/admin",
     icon: <DashboardOutlined color="primary" />
   },
@@ -204,6 +216,21 @@ const adminRoutes = [
     ]
   },
   {
+    title: "التقارير",
+    path: "/reports",
+    layout: "/admin",
+    icon: <PrintOutlined color="primary" />,
+    children: [
+      {
+        title: "تقارير الطلاب",
+        path: "/student-report",
+        layout: "/admin",
+        icon: <PeopleAltOutlined color="primary" />,
+        component: StudentReports,
+      }
+    ]
+  },
+  {
     title: "الإعدادات",
     path: "/settings",
     layout: "/admin",
@@ -222,6 +249,13 @@ const adminRoutes = [
         layout: "/admin",
         icon: <InsertDriveFileOutlined color="primary" />,
         component: ExamPreparation,
+      },
+      {
+        title: "إعداد المجموعات",
+        path: "/group-preparation",
+        layout: "/admin",
+        icon: <BubbleChartOutlined color="primary" />,
+        component: GroupPreparation,
       },
       {
         title: "إعداد المحفوظات",
@@ -243,12 +277,26 @@ const adminRoutes = [
         layout: "/admin",
         icon: <EventOutlined color="primary" />,
         component: TimetablePreparation,
+      },
+      {
+        title: "صلاحيات المستخدمين",
+        path: "/user-permissions",
+        layout: "/admin",
+        icon: <AccountCircleOutlined color="primary" />,
+        component: UserPermissions,
       }
     ]
   }
 ];
 
 const teacherRoutes = [
+  {
+    title: "الصفحة الرئيسية",
+    path: "/dashboard",
+    component: TeacherDashboard,
+    layout: "/teacher",
+    icon: <DashboardOutlined color="primary" />
+  },
   {
     title: "تسجيل الحضور",
     path: "/attendance-registration",

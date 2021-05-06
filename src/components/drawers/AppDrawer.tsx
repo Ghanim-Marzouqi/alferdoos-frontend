@@ -66,7 +66,7 @@ type DrawerItem = {
   route: string;
   icon: React.ReactElement<SvgIconProps>;
   notifications: number;
-  hasChildren: boolean;
+  hasChildren?: boolean;
   children?: { title: string; route: string; icon: React.ReactElement<SvgIconProps>; notifications: number; }[]
 };
 

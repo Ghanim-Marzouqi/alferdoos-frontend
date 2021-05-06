@@ -2,7 +2,7 @@ import React from 'react';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import {
-  unstable_createMuiStrictModeTheme as createMuiTheme,
+  createMuiTheme,
   ThemeProvider,
   StylesProvider,
   jssPreset
