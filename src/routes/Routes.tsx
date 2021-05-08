@@ -23,7 +23,8 @@ import {
   BookOutlined,
   EventOutlined,
   AccountCircleOutlined,
-  PrintOutlined
+  PrintOutlined,
+  DateRangeOutlined
 } from '@material-ui/icons';
 
 // **************** AUTH PAGES *********************
@@ -40,6 +41,7 @@ import Exams from '../pages/admin/students/Exams';
 import StudentList from '../pages/admin/students/StudentList';
 // teacher page list
 import TeacherList from '../pages/admin/teachers/TeacherList';
+import TeacherSupervisionTable from '../pages/admin/teachers/TeacherSupervisionTable';
 // group page list
 import GroupList from '../pages/admin/groups/GroupList';
 import Timetable from '../pages/admin/groups/Timetable';
@@ -147,6 +149,13 @@ const adminRoutes = [
         layout: "/admin",
         icon: <PersonOutline color="primary" />,
         component: TeacherList,
+      },
+      {
+        title: "جدول إشراف المعلمين",
+        path: "/teacher-supervision-table",
+        layout: "/admin",
+        icon: <DateRangeOutlined color="primary" />,
+        component: TeacherSupervisionTable,
       }
     ]
   },
