@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
-  makeStyles,
   Box,
   Button,
   Checkbox,
@@ -9,14 +9,13 @@ import {
   Grid,
   Link,
   TextField,
-  Theme,
   Typography
 } from '@material-ui/core';
 
 import HTMLHeader from '../../components/info/HTMLHeader';
 import Copyright from '../../components/info/Copyright';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => createStyles({
   logo: {
     width: '200px',
     height: 'auto'
@@ -51,7 +50,7 @@ const Login: React.FC = () => {
         />
         <Typography component="h1" variant="h5">
           تسجيل الدخول
-      </Typography>
+        </Typography>
         <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
@@ -86,7 +85,7 @@ const Login: React.FC = () => {
             onClick={() => history.push('/admin')}
           >
             تسجيل الدخول
-        </Button>
+          </Button>
           <Grid container direction="row" justify="space-between">
             <Grid item>
               <Link

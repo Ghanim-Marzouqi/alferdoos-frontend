@@ -1,20 +1,19 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
-  makeStyles,
   Box,
   Button,
   Grid,
   Link,
   TextField,
-  Theme,
   Typography
 } from '@material-ui/core';
 
 import HTMLHeader from '../../components/info/HTMLHeader';
 import Copyright from '../../components/info/Copyright';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => createStyles({
   logo: {
     width: '200px',
     height: 'auto'

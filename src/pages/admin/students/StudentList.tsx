@@ -1,10 +1,27 @@
 import React from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Grid, Typography } from '@material-ui/core';
+
+import HTMLHeader from '../../../components/info/HTMLHeader';
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  container: {
+    padding: theme.spacing(2)
+  }
+}));
 
 const StudentList: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <div>
-      <h1>الطلاب المسجلين</h1>
-    </div>
+    <>
+      <HTMLHeader title="مركز الفردوس الأعلى | الطلاب المسجلين" />
+      <Grid className={classes.container} container>
+        <Typography variant="h4" component="h1">
+          الطلاب المسجلين
+        </Typography>
+      </Grid>
+    </>
   )
 }
 

@@ -51,7 +51,7 @@ const AppDrawerMultiOptions: React.FC<Props> = ({ item }) => {
   const [collapse, setCollapse] = useState(false);
 
   const toggleCollapse = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setCollapse(!collapse);
+    setCollapse((!collapse));
   };
 
   return (
