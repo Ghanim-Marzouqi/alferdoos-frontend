@@ -16,6 +16,9 @@ import {
 } from '@material-ui/core';
 
 import HTMLHeader from '../../components/info/HTMLHeader';
+import MainInfoForm from '../../components/forms/StudentRegistrationForms/MainInfoForm';
+import SubjectInfoForm from '../../components/forms/StudentRegistrationForms/SubjectInfoForm';
+import AdditionalInfoForm from '../../components/forms/StudentRegistrationForms/AdditionalInfoForm';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
@@ -29,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     marginRight: theme.spacing(1),
   },
   actionsContainer: {
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
   instructions: {
@@ -47,13 +51,13 @@ const getSteps = () => {
 const getStepContent = (step: number) => {
   switch (step) {
     case 0:
-      return 'تفاصيل البيانات الأساسية';
+      return <MainInfoForm />;
     case 1:
-      return 'تفاصيل المواد الدراسية';
+      return <SubjectInfoForm />;
     case 2:
-      return 'تفاصيل البيانات الإضافية';
+      return <AdditionalInfoForm />;
     default:
-      return 'خطوة غير معروفة';
+      return <Typography>خطوة غير معروفة</Typography>;
   }
 }
 
@@ -97,7 +101,7 @@ const StudentRegistration: React.FC = () => {
                     </div>
                   ) : (
                     <div>
-                      <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+                      {getStepContent(activeStep)}
                     </div>
                   )}
                 </CardContent>
@@ -132,7 +136,7 @@ const StudentRegistration: React.FC = () => {
                       <Step key={label}>
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
-                          <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+                          {getStepContent(activeStep)}
                           <div className={classes.actionsContainer}>
                             <div>
                               <Button
