@@ -17,7 +17,7 @@ const TeacherSupervisionTable: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | جدول إشراف المعلمين" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           جدول إشراف المعلمين
         </Typography>
       </Grid>

@@ -17,7 +17,7 @@ const TimetablePreparation: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | إعداد جدول الحصص الدراسية" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           إعداد جدول الحصص الدراسية
         </Typography>
       </Grid>

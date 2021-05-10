@@ -83,9 +83,15 @@ const Profile: React.FC = () => {
   };
 
   const imageFileChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files !== null) {
+    if (event.target.files !== null && typeof event.target.files !== "undefined") {
       const file = event.target.files[0];
-      setForm(preForm => ({ ...preForm, profileImage: URL.createObjectURL(file) }));
+      if (typeof file !== "undefined") {
+        setForm(preForm => ({ ...preForm, profileImage: URL.createObjectURL(file) }));
+      } else {
+        setForm(preForm => ({ ...preForm, profileImage: require("../../assets/images/avatar.jpeg").default }));
+      }
+    } else {
+      setForm(preForm => ({ ...preForm, profileImage: require("../../assets/images/avatar.jpeg").default }));
     }
   };
 
@@ -101,7 +107,7 @@ const Profile: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | الملف الشخصي" />
       <Grid className={classes.container} container direction="column">
-        <Typography className={classes.title} variant="h4" component="h1">
+        <Typography className={classes.title} variant="h5" component="h1">
           الملف الشخصي
         </Typography>
         <Grid item>

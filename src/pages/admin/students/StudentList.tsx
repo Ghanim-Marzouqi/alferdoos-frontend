@@ -17,7 +17,7 @@ const StudentList: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | الطلاب المسجلين" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           الطلاب المسجلين
         </Typography>
       </Grid>

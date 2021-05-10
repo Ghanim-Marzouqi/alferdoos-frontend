@@ -17,7 +17,7 @@ const TeacherList = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | المعلمين المسجلين" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           المعلمين المسجلين
         </Typography>
       </Grid>

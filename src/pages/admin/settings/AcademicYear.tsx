@@ -17,7 +17,7 @@ const AcademicYear: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | إعدادات السنة الدراسية" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           إعدادات السنة الدراسية
         </Typography>
       </Grid>

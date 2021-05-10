@@ -17,7 +17,7 @@ const StudentReports: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | تقارير الطلاب" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           تقارير الطلاب
         </Typography>
       </Grid>

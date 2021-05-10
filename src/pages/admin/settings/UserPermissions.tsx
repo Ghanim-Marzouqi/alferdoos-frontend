@@ -17,7 +17,7 @@ const UserPermissions: React.FC = () => {
     <>
       <HTMLHeader title="مركز الفردوس الأعلى | صلاحيات المستخدمين" />
       <Grid className={classes.container} container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           صلاحيات المستخدمين
         </Typography>
       </Grid>
