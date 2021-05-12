@@ -11,7 +11,7 @@ import {
 import { Menu, PowerSettingsNew } from '@material-ui/icons';
 
 import Profile from '../pages/auth/Profile';
-import Drawer from '../components/drawers/AppDrawer';
+import Drawer from '../components/drawer';
 import { useStyles } from './BaseStyles';
 import { adminRoutes } from '../routes/Routes';
 

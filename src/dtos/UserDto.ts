@@ -1,6 +1,7 @@
 import { USER_TYPE } from "../config/Constants";
 
 export default interface UserDto {
+  // main properties
   readonly id?: number;
   name: string;
   email: string;
