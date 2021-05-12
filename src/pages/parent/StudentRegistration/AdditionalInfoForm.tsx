@@ -1,18 +1,19 @@
 import React, { useState, useRef } from 'react';
+import clsx from 'clsx';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
   Avatar,
   Badge,
-  Fab,
   FormControl,
   FormControlLabel,
   Grid,
+  InputAdornment,
   Radio,
   RadioGroup,
   TextField,
   Typography
 } from '@material-ui/core';
-import { EditRounded, CloudUpload } from '@material-ui/icons';
+import { EditRounded, AttachFile } from '@material-ui/icons';
 
 import Colors from '../../../config/Colors';
 import StudentDto from '../../../dtos/StudentDto';
@@ -73,6 +74,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     marginTop: theme.spacing(4)
   },
+  infoImage: {
+    border: '#119076 1px solid'
+  },
+  errorImage: {
+    border: 'red 1px solid'
+  },
   radioGroupContainer: {
     marginTop: 0
   },
@@ -85,9 +92,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
   student: StudentDto;
   setStudent: React.Dispatch<React.SetStateAction<StudentDto>>;
+  errors: string[];
+  setErrors: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent }) => {
+const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors }) => {
   const classes = useStyles();
   const imageRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<string>(require("../../../assets/images/avatar.jpeg").default);
@@ -105,6 +114,8 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent }) => {
       const file = event.target.files[0];
       if (typeof file !== "undefined") {
         setImage(URL.createObjectURL(file));
+        setStudent(prevStudent => ({ ...prevStudent, studentImage: file }));
+        setErrors(prevErrors => prevErrors.filter(err => err !== "studentImage"));
       } else {
         setImage(require("../../../assets/images/avatar.jpeg").default);
       }
@@ -113,27 +124,50 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent }) => {
     }
   };
 
+  const attachmentsChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null && typeof event.target.files !== "undefined") {
+      const attachments = Array.from(event.target.files).map(file => file);
+      console.log(attachments);
+      if (attachments.length > 0) {
+        setStudent(prevStudent => ({ ...prevStudent, certificates: attachments }));
+        setErrors(prevErrors => prevErrors.filter(err => err !== "certificates"));
+      }
+    }
+  }
+
+  const getAttachments = (attachments: File[]) => {
+    const filenames = attachments.map(attachment => attachment.name);
+    return filenames.join(",");
+  }
+
   return (
     <form className={classes.form} noValidate>
       <Grid className={classes.section} container item spacing={1}>
         <Grid item sm={6} xs={12}>
           <Typography className={classes.heading}>هل سبق للطالب التعلم في مركز لحفظ القرآن الكريم؟</Typography>
           <FormControl className={classes.radioGroupContainer} component="fieldset">
-            <RadioGroup row aria-label="finishedClass" name="finishedClass" value="no" onChange={() => { }}>
-              <FormControlLabel value="yes" control={<Radio color="primary" />} label="نعم" />
-              <FormControlLabel value="no" control={<Radio color="primary" />} label="لا" />
+            <RadioGroup row aria-label="isLearntInQuranCenter" name="isLearntInQuranCenter" value={student.isLearntInQuranCenter} onChange={e => setStudent(prevStudent => ({ ...prevStudent, isLearntInQuranCenter: JSON.parse(e.target.value as string) }))}>
+              <FormControlLabel value={true} control={<Radio color="primary" />} label="نعم" />
+              <FormControlLabel value={false} control={<Radio color="primary" />} label="لا" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            size="small"
-            fullWidth
-            id="oldCenterLocation"
-            label="موقع أو مكان المركز"
-            name="oldCenterLocation"
-            autoComplete="oldCenterLocation"
-          />
+          {student.isLearntInQuranCenter &&
+            <TextField
+              variant="outlined"
+              margin="normal"
+              size="small"
+              fullWidth
+              hidden
+              label="موقع أو مكان المركز"
+              name="quranCenterLocation"
+              value={student.quranCenterLocation}
+              error={errors.some(err => err === "quranCenterLocation")}
+              onChange={e => {
+                setStudent(prevStudent => ({ ...prevStudent, quranCenterLocation: e.target.value as string }));
+                setErrors(prevErrors => prevErrors.filter(err => err !== "quranCenterLocation"));
+              }}
+            />
+          }
           <Typography style={{ marginTop: 10 }} className={classes.heading}>ما هي المهارات التي يمتلكها الطالب؟</Typography>
           <TextField
             variant="outlined"
@@ -141,48 +175,63 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             fullWidth
             multiline
             rows={3}
-            id="studentSkills"
-            label="مهارات الطالب"
-            name="studentSkills"
+            label="مهارات الطالب (إختياري)"
+            name="skills"
+            value={student.skills}
+            onChange={e => setStudent(prevStudent => ({ ...prevStudent, skills: e.target.value as string }))}
           />
           <Typography style={{ marginTop: 10 }} className={classes.heading}>الحالة الصحية للطالب؟</Typography>
           <FormControl style={{ marginBottom: -10 }} className={classes.radioGroupContainer} component="fieldset">
-            <RadioGroup row aria-label="finishedClass" name="finishedClass" value="sick" onChange={() => { }}>
-              <FormControlLabel value="healthy" control={<Radio color="primary" />} label="سليم" />
-              <FormControlLabel value="sick" control={<Radio color="primary" />} label="مريض" />
+            <RadioGroup row aria-label="isHealthy" name="isHealthy" value={student.isHealthy} onChange={e => setStudent(prevStudent => ({ ...prevStudent, isHealthy: JSON.parse(e.target.value as string) }))}>
+              <FormControlLabel value={true} control={<Radio color="primary" />} label="سليم" />
+              <FormControlLabel value={false} control={<Radio color="primary" />} label="مريض" />
             </RadioGroup>
           </FormControl>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            multiline
-            rows={3}
-            id="studentSkills"
-            label="وصف الأمراض أو الأعراض"
-            name="studentSkills"
-          />
+          {!student.isHealthy &&
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              multiline
+              rows={3}
+              label="وصف الأمراض أو الأعراض"
+              name="healthIssues"
+              value={student.healthIssues}
+              error={errors.some(err => err === "healthIssues")}
+              onChange={e => {
+                setStudent(prevStudent => ({ ...prevStudent, healthIssues: e.target.value as string }));
+                setErrors(prevErrors => prevErrors.filter(err => err !== "healthIssues"));
+              }}
+            />
+          }
           <Typography style={{ marginTop: 10 }} className={classes.heading}>المرفقات</Typography>
           <div style={{ marginTop: 10 }}>
             <input
-              accept="image/*"
+              accept="application/pdf"
               hidden
               id="file-upload"
               multiple
               type="file"
+              onChange={attachmentsChangeHandler}
             />
             <label htmlFor="file-upload" className={classes.attachmentContainer}>
               <TextField
                 style={{ width: '100%' }}
                 variant="outlined"
                 size="small"
-                id="studentSkills"
+                dir="ltr"
                 label="شهادات الطالب"
-                name="studentSkills"
+                name="certificates"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachFile color="primary" />
+                    </InputAdornment>
+                  )
+                }}
+                value={getAttachments(student.certificates)}
+                error={errors.some(err => err === "certificates")}
               />
-              <Fab style={{ marginRight: 5 }} size="small" color="primary" component="span">
-                <CloudUpload fontSize="small" />
-              </Fab>
             </label>
           </div>
         </Grid>
@@ -193,7 +242,7 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             badgeContent={<EditRounded className={classes.avatarBadge} color="secondary" />}
             onClick={imageFileClickHandler}
           >
-            <Avatar className={classes.avatar} alt="Travis Howard" src={image} />
+            <Avatar className={errors.some(err => err === "studentImage") ? clsx(classes.avatar, classes.errorImage) : clsx(classes.avatar, classes.infoImage)} alt="Student Image" src={image} />
           </Badge>
           <input
             className={classes.imageFile}

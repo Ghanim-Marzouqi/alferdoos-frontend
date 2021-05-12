@@ -41,9 +41,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
   student: StudentDto;
   setStudent: React.Dispatch<React.SetStateAction<StudentDto>>;
+  errors: string[];
+  setErrors: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
+const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors }) => {
   const classes = useStyles();
 
   const villageChangeHandler = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
@@ -66,7 +68,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             label="الأسم الأول"
             name="firstName"
             value={student.firstName}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, firstName: e.target.value }))}
+            error={errors.some(err => err === "firstName")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, firstName: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "firstName"));
+            }}
           />
         </Grid>
         <Grid item lg={3} md={3} sm={6} xs={12}>
@@ -78,7 +84,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             label="الأسم الثاني"
             name="secondName"
             value={student.secondName}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, secondName: e.target.value }))}
+            error={errors.some(err => err === "secondName")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, secondName: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "secondName"));
+            }}
           />
         </Grid>
         <Grid item lg={3} md={3} sm={6} xs={12}>
@@ -90,7 +100,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             label="الأسم الثالث"
             name="thirdName"
             value={student.thridName}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, thridName: e.target.value }))}
+            error={errors.some(err => err === "thridName")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, thridName: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "thridName"));
+            }}
           />
         </Grid>
         <Grid item lg={3} md={3} sm={6} xs={12}>
@@ -102,14 +116,18 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             label="القبيلة"
             name="familyName"
             value={student.familyName}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, familyName: e.target.value }))}
+            error={errors.some(err => err === "familyName")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, familyName: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "familyName"));
+            }}
           />
         </Grid>
       </Grid>
       <Typography className={classes.heading}>انهى الصف:</Typography>
       <Grid className={classes.section} container item>
         <FormControl className={classes.radioGroupContainer} component="fieldset">
-          <RadioGroup row aria-label="finishedGrade" name="finishedGrade" value={student.finishedGrade} onChange={e => setStudent(prevStudent => ({ ...prevStudent, finishedGrade: e.target.value }))}>
+          <RadioGroup row aria-label="finishedGrade" name="finishedGrade" value={student.finishedGrade} onChange={e => setStudent(prevStudent => ({ ...prevStudent, finishedGrade: e.target.value as string }))}>
             <FormControlLabel value="seven" control={<Radio color="primary" />} label="السابع" />
             <FormControlLabel value="eight" control={<Radio color="primary" />} label="الثامن" />
             <FormControlLabel value="nine" control={<Radio color="primary" />} label="التاسع" />
@@ -128,7 +146,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             type="number"
             name="firstPhoneNumber"
             value={student.firstPhoneNumber}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, firstPhoneNumber: e.target.value }))}
+            error={errors.some(err => err === "firstPhoneNumber")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, firstPhoneNumber: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "firstPhoneNumber"));
+            }}
           />
         </Grid>
         <Grid item lg={4} md={4} sm={6} xs={12}>
@@ -137,11 +159,15 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             margin="normal"
             size="small"
             fullWidth
-            label="رقم ولي الأمر الثاني"
+            label="رقم ولي الأمر الثاني (إختياري)"
             type="number"
             name="secondPhoneNumber"
             value={student.secondPhoneNumber}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, secondPhoneNumber: e.target.value }))}
+            error={errors.some(err => err === "secondPhoneNumber")}
+            onChange={e => {
+              setStudent(prevStudent => ({ ...prevStudent, secondPhoneNumber: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err !== "secondPhoneNumber"));
+            }}
           />
         </Grid>
         <Grid item lg={4} md={4} sm={6} xs={12}>

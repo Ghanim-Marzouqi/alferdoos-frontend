@@ -52,27 +52,104 @@ const StudentRegistration: React.FC = () => {
   const steps = ['البيانات الأساسية', 'بيانات المواد الدراسية', 'بيانات إضافية'];
   const [activeStep, setActiveStep] = useState<number>(0);
   const [student, setStudent] = useState<StudentDto>(INITIAL_STUDENT_DATA);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <MainInfoForm student={student} setStudent={setStudent} />;
+        return <MainInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
       case 1:
-        return <SubjectInfoForm student={student} setStudent={setStudent} />;
+        return <SubjectInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
       case 2:
-        return <AdditionalInfoForm student={student} setStudent={setStudent} />;
+        return <AdditionalInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
       default:
         return <Typography>خطوة غير معروفة</Typography>;
     }
   }
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (isFormValid()) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+
+    if (activeStep === steps.length - 1 && isFormValid()) {
+      submitForm();
+    }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const isFormValid = (): boolean => {
+    let status = true;
+
+    if (activeStep === 0 && student.firstName === "") {
+      setErrors(prevErrors => [...prevErrors, "firstName"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.secondName === "") {
+      setErrors(prevErrors => [...prevErrors, "secondName"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.thridName === "") {
+      setErrors(prevErrors => [...prevErrors, "thridName"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.familyName === "") {
+      setErrors(prevErrors => [...prevErrors, "familyName"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.firstPhoneNumber === "") {
+      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.firstPhoneNumber.length !== 8) {
+      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && (student.firstPhoneNumber.substr(0, 1) !== "7" && student.firstPhoneNumber.substr(0, 1) !== "9")) {
+      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      status = false;
+    }
+
+    if (activeStep === 0 && student.secondPhoneNumber !== "" && (student.secondPhoneNumber.substr(0, 1) !== "7" && student.secondPhoneNumber.substr(0, 1) !== "9")) {
+      setErrors(prevErrors => [...prevErrors, "secondPhoneNumber"]);
+      status = false;
+    }
+
+    if (activeStep === 2 && student.isLearntInQuranCenter && student.quranCenterLocation === "") {
+      setErrors(prevErrors => [...prevErrors, "quranCenterLocation"]);
+      status = false;
+    }
+
+    if (activeStep === 2 && !student.isHealthy && student.healthIssues === "") {
+      setErrors(prevErrors => [...prevErrors, "healthIssues"]);
+      status = false;
+    }
+
+    if (activeStep === 2 && student.certificates.length < 1) {
+      setErrors(prevErrors => [...prevErrors, "certificates"]);
+      status = false;
+    }
+
+    if (activeStep === 2 && student.studentImage.name === "") {
+      setErrors(prevErrors => [...prevErrors, "studentImage"]);
+      status = false;
+    }
+
+    return status;
+  }
+
+  const submitForm = () => {
+    console.log("student", student);
+  }
 
   return (
     <>

@@ -21,8 +21,8 @@ export default interface StudentDto {
   skills: string;
   isHealthy: boolean;
   healthIssues: string;
-  certificates: string[];
-  studentImage: string;
+  certificates: File[];
+  studentImage: File;
   readonly parentId?: number;
 
   // navigation properties

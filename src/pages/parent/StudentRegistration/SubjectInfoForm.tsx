@@ -55,6 +55,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
   student: StudentDto;
   setStudent: React.Dispatch<React.SetStateAction<StudentDto>>;
+  errors: string[];
+  setErrors: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {

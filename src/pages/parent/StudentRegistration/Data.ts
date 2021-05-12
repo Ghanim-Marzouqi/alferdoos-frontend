@@ -18,7 +18,7 @@ const INITIAL_STUDENT_DATA = {
   isHealthy: true,
   healthIssues: "",
   certificates: [],
-  studentImage: ""
+  studentImage: new File([], "")
 }
 
 const VILLAGES = ["معمد", "المعري", "البلاد", "الفيقين", "البياض", "الشعيبة", "حي جامع", "المعيول", "عز", "متان", "أخرى"];
