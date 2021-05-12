@@ -119,6 +119,11 @@ const StudentRegistration: React.FC = () => {
       status = false;
     }
 
+    if (activeStep === 0 && student.secondPhoneNumber !== "" && student.secondPhoneNumber.length !== 8) {
+      setErrors(prevErrors => [...prevErrors, "secondPhoneNumber"]);
+      status = false;
+    }
+
     if (activeStep === 0 && student.secondPhoneNumber !== "" && (student.secondPhoneNumber.substr(0, 1) !== "7" && student.secondPhoneNumber.substr(0, 1) !== "9")) {
       setErrors(prevErrors => [...prevErrors, "secondPhoneNumber"]);
       status = false;

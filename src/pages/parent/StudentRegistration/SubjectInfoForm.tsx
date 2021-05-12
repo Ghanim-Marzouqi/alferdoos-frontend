@@ -61,8 +61,8 @@ type Props = {
 
 const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {
   const classes = useStyles();
-  const [selectedChapter] = useState<string>("- اختر -");
-  const [selectedSurah] = useState<string>("- اختر -");
+  const [selectedChapter] = useState<{ id: number, name: string }>({ id: 0, name: "- اختر -" });
+  const [selectedSurah] = useState<{ id: number, name: string, chapter: number, phrases: number }>({ id: 0, name: "- اختر -", chapter: 0, phrases: 0 });
 
   const selectChapterChangeHandler = (chapter: string) => {
     let savedChapters = student.savedChapters;
@@ -130,8 +130,8 @@ const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {
       <Grid style={{ marginTop: 10 }} className={classes.section} container item spacing={1}>
         <Grid item xs={12}>
           <FormControl className={classes.formControl} variant="outlined" size="small">
-            <Select labelId="select-label" value={selectedChapter} onChange={e => selectChapterChangeHandler(e.target.value as string)}>
-              {CHAPTERS.map(chapter => <MenuItem key={chapter} value={chapter}>{chapter}</MenuItem>)}
+            <Select labelId="select-label" value={selectedChapter.name} onChange={e => selectChapterChangeHandler(e.target.value as string)}>
+              {CHAPTERS.map(chapter => <MenuItem key={chapter.id} value={chapter.name}>{chapter.name}</MenuItem>)}
             </Select>
           </FormControl>
         </Grid>
@@ -164,8 +164,8 @@ const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {
       <Grid style={{ marginTop: 10 }} className={classes.section} container item spacing={1}>
         <Grid item xs={12}>
           <FormControl className={classes.formControl} variant="outlined" size="small">
-            <Select labelId="select-label" value={selectedSurah} onChange={e => selectSurahChangeHandler(e.target.value as string)}>
-              {SURAHS.map((surah, i) => <MenuItem key={i} value={surah}>{surah}</MenuItem>)}
+            <Select labelId="select-label" value={selectedSurah.name} onChange={e => selectSurahChangeHandler(e.target.value as string)}>
+              {SURAHS.map((surah, i) => <MenuItem key={surah.id} value={surah.name}>{surah.name}</MenuItem>)}
             </Select>
           </FormControl>
         </Grid>
