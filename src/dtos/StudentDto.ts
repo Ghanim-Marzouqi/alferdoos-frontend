@@ -12,8 +12,8 @@ export default interface StudentDto {
   firstPhoneNumber: string;
   secondPhoneNumber: string;
   village: string;
-  subjectANumber: number;
-  subjectBNumber: number;
+  subjectANumber: string;
+  subjectBNumber: string;
   savedChapters: string[];
   savedSurahs: string[];
   isLearntInQuranCenter: boolean;

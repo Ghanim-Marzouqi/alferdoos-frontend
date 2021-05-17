@@ -109,7 +109,7 @@ const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             type="number"
             name="subjectANumber"
             value={student.subjectANumber}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, subjectANumber: Number(e.target.value) }))}
+            onChange={e => setStudent(prevStudent => ({ ...prevStudent, subjectANumber: e.target.value as string }))}
           />
         </Grid>
         <Grid item sm={6} xs={12}>
@@ -122,7 +122,7 @@ const SubjectInfoForm: React.FC<Props> = ({ student, setStudent }) => {
             type="number"
             name="subjectBNumber"
             value={student.subjectBNumber}
-            onChange={e => setStudent(prevStudent => ({ ...prevStudent, subjectBNumber: Number(e.target.value) }))}
+            onChange={e => setStudent(prevStudent => ({ ...prevStudent, subjectBNumber: e.target.value as string }))}
           />
         </Grid>
       </Grid>

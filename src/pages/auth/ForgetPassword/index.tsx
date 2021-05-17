@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -35,6 +35,44 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const ForgetPassword: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [form, setForm] = useState({ email: "" });
+  const [errors, setErrors] = useState<{ error: string, errorMessage: string }[]>([]);
+
+  const isValidEmail = (email: string): boolean => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  const isValidForm = (): boolean => {
+    let status = true;
+
+    if (form.email === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "email", errorMessage: "الرجاء إدخال البريد الإلكتروني" }]);
+      status = false;
+    }
+
+    if (!isValidEmail(form.email)) {
+      setErrors(prevErrors => [...prevErrors, { error: "email", errorMessage: "البريد الإلكتروني غير صحيح" }]);
+      status = false;
+    }
+
+    return status;
+  }
+
+  const showErrorMessage = (field: string): string => {
+    const error = errors.find(err => err.error === field);
+    if (error) return error.errorMessage;
+    else return "";
+  }
+
+  const submitButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
+    if (isValidForm()) {
+      setErrors([]);
+      console.log("submitted", form);
+    }
+  }
 
   return (
     <>
@@ -53,19 +91,24 @@ const ForgetPassword: React.FC = () => {
             variant="outlined"
             margin="normal"
             fullWidth
-            id="email"
+            size="small"
             label="البريد الإلكتروني"
             name="email"
-            autoComplete="email"
             autoFocus
-            type="email"
+            error={errors.some(err => err.error === "email")}
+            helperText={showErrorMessage("email")}
+            onChange={e => {
+              setForm(prevForm => ({ ...prevForm, email: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "email"));
+            }}
           />
           <Button
-            type="submit"
-            fullWidth
             variant="contained"
             color="primary"
+            fullWidth
+            size="small"
             className={classes.submit}
+            onClick={submitButtonClickHandler}
           >
             إرسال
         </Button>

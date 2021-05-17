@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -35,6 +35,45 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const ResetPassword: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [form, setForm] = useState({ password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState<{ error: string, errorMessage: string }[]>([]);
+
+  const isValidForm = (): boolean => {
+    let status = true;
+
+    if (form.password === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "password", errorMessage: "الرجاء إدخال كلمة المرور" }]);
+      status = false;
+    }
+
+    if (form.confirmPassword === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "confirmPassword", errorMessage: "الرجاء إدخال كلمة المرور" }]);
+      status = false;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setErrors(prevErrors => [...prevErrors, { error: "password", errorMessage: "كلمة المرور غير متطابقة" }]);
+      setErrors(prevErrors => [...prevErrors, { error: "confirmPassword", errorMessage: "كلمة المرور غير متطابقة" }]);
+      status = false;
+    }
+
+    return status;
+  }
+
+  const showErrorMessage = (field: string): string => {
+    const error = errors.find(err => err.error === field);
+    if (error) return error.errorMessage;
+    else return "";
+  }
+
+  const submitButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
+    if (isValidForm()) {
+      console.log("submitted", form);
+      history.push("/admin");
+    }
+  }
 
   return (
     <>
@@ -47,38 +86,49 @@ const ResetPassword: React.FC = () => {
         />
         <Typography component="h1" variant="h5">
           إعادة تعيين كلمة المرور
-      </Typography>
+        </Typography>
         <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
             fullWidth
-            name="password"
+            size="small"
+            autoFocus
             label="كلمة المرور الجديدة"
             type="password"
-            id="password"
-            autoComplete="current-password"
-            autoFocus
+            name="password"
+            error={errors.some(err => err.error === "password")}
+            helperText={showErrorMessage("password")}
+            onChange={e => {
+              setForm(prevForm => ({ ...prevForm, password: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "password"));
+            }}
           />
           <TextField
             variant="outlined"
             margin="normal"
             fullWidth
-            name="confirmPassword"
+            size="small"
             label="تآكيد كلمة المرور الجديدة"
             type="password"
-            id="confirmPassword"
-            autoComplete="current-password"
+            name="confirmPassword"
+            error={errors.some(err => err.error === "confirmPassword")}
+            helperText={showErrorMessage("confirmPassword")}
+            onChange={e => {
+              setForm(prevForm => ({ ...prevForm, confirmPassword: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "confirmPassword"));
+            }}
           />
           <Button
-            type="submit"
-            fullWidth
             variant="contained"
             color="primary"
+            fullWidth
+            size="small"
             className={classes.submit}
+            onClick={submitButtonClickHandler}
           >
             إرسال
-        </Button>
+          </Button>
           <Grid container direction="row" justify="center" alignItems="center">
             <Grid item>
               <Link

@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   avatar: {
     width: 200,
-    height: 200
+    height: 200,
+    border: '#119076 1px solid'
   },
   avatarContainer: {
     display: 'flex',
@@ -79,6 +80,7 @@ const Profile: React.FC = () => {
     profileImage: require("../../../assets/images/avatar.jpeg").default,
     userType: USER_TYPE.ADMIN,
   });
+  const [errors, setErrors] = useState<string[]>([]);
 
   const imageFileClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
@@ -101,12 +103,53 @@ const Profile: React.FC = () => {
     }
   };
 
-  const profileButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
+  const isValidEmail = (email: string): boolean => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   };
 
-  const imageUploadButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const isValidForm = (): boolean => {
+    let status = true;
+
+    if (form.name === "") {
+      setErrors(prevErrors => [...prevErrors, "name"]);
+      status = false;
+    }
+
+    if (form.email === "") {
+      setErrors(prevErrors => [...prevErrors, "email"]);
+      status = false;
+    }
+
+    if (!isValidEmail(form.email)) {
+      setErrors(prevErrors => [...prevErrors, "email"]);
+      status = false;
+    }
+
+    if (form.phone.length !== 8) {
+      setErrors(prevErrors => [...prevErrors, "phone"]);
+      status = false;
+    }
+
+    if (form.phone.substr(0, 1) !== "7" && form.phone.substr(0, 1) !== "9") {
+      setErrors(prevErrors => [...prevErrors, "phone"]);
+      status = false;
+    }
+
+    if (form.username === "") {
+      setErrors(prevErrors => [...prevErrors, "username"]);
+      status = false;
+    }
+
+    return status;
+  };
+
+  const submitButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
+
+    if (isValidForm()) {
+      console.log("submitted", form);
+    }
   };
 
   return (
@@ -116,101 +159,98 @@ const Profile: React.FC = () => {
         <Typography className={classes.title} variant="h5" component="h1">
           الملف الشخصي
         </Typography>
-        <Grid item>
-          <Grid container spacing={1}>
-            <Grid item lg={6} md={6} xs={12}>
-              <Card className={classes.card}>
-                <CardContent className={classes.avatarContainer}>
-                  <form className={classes.form} noValidate>
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      fullWidth
-                      id="name"
-                      label="الأسم"
-                      name="name"
-                      autoComplete="name"
-                      autoFocus
-                      onChange={e => setForm(preForm => ({ ...preForm, name: e.target.value }))}
-                    />
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      fullWidth
-                      id="email"
-                      label="البريد الإلكتروني"
-                      name="email"
-                      autoComplete="email"
-                      type="email"
-                      onChange={e => setForm(preForm => ({ ...preForm, email: e.target.value }))}
-                    />
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      fullWidth
-                      id="phone"
-                      label="رقم الهاتف"
-                      name="phone"
-                      autoComplete="phone"
-                      type="number"
-                      onChange={e => setForm(preForm => ({ ...preForm, phone: e.target.value }))}
-                    />
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      fullWidth
-                      id="username"
-                      label="آسم المستخدم"
-                      name="username"
-                      autoComplete="username"
-                      onChange={e => setForm(preForm => ({ ...preForm, username: e.target.value }))}
-                    />
-                    <FormControl className={classes.formControl} variant="outlined" size="small">
-                      <Select labelId="select-label" readOnly value={form.userType} onChange={e => { }}>
-                        <MenuItem value="ADMIN">مشرف النظام</MenuItem>
-                        <MenuItem value="TEACHER">معلم</MenuItem>
-                        <MenuItem value="PARENT">ولي أمر</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </form>
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" variant="contained" onClick={profileButtonClickHandler}>حفظ</Button>
-                </CardActions>
-              </Card>
+        <Card className={classes.card}>
+          <CardContent>
+            <Grid item container direction="row">
+              <Grid item sm={6} xs={12}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  fullWidth
+                  autoFocus
+                  label="الأسم"
+                  name="name"
+                  error={errors.some(err => err === "name")}
+                  onChange={e => {
+                    setForm(prevForm => ({ ...prevForm, name: e.target.value as string }));
+                    setErrors(prevErrors => prevErrors.filter(err => err !== "name"));
+                  }}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  fullWidth
+                  label="البريد الإلكتروني"
+                  type="email"
+                  name="email"
+                  error={errors.some(err => err === "email")}
+                  onChange={e => {
+                    setForm(prevForm => ({ ...prevForm, email: e.target.value as string }));
+                    setErrors(prevErrors => prevErrors.filter(err => err !== "email"));
+                  }}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  fullWidth
+                  label="رقم الهاتف"
+                  type="number"
+                  name="phone"
+                  error={errors.some(err => err === "phone")}
+                  onChange={e => {
+                    setForm(prevForm => ({ ...prevForm, phone: e.target.value as string }));
+                    setErrors(prevErrors => prevErrors.filter(err => err !== "phone"));
+                  }}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  fullWidth
+                  label="آسم المستخدم"
+                  name="username"
+                  error={errors.some(err => err === "username")}
+                  onChange={e => {
+                    setForm(prevForm => ({ ...prevForm, username: e.target.value as string }));
+                    setErrors(prevErrors => prevErrors.filter(err => err !== "username"));
+                  }}
+                />
+                <FormControl className={classes.formControl} variant="outlined" size="small">
+                  <Select labelId="select-label" readOnly value={form.userType} onChange={e => { }}>
+                    <MenuItem value="ADMIN">مشرف النظام</MenuItem>
+                    <MenuItem value="TEACHER">معلم</MenuItem>
+                    <MenuItem value="PARENT">ولي أمر</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid className={classes.avatarContainer} item sm={6} xs={12}>
+                <Badge
+                  overlap="circle"
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                  badgeContent={<EditRounded className={classes.avatarBadge} color="secondary" />}
+                  onClick={imageFileClickHandler}
+                >
+                  <Avatar className={classes.avatar} alt="Travis Howard" src={form.profileImage} />
+                </Badge>
+                <input
+                  className={classes.imageFile}
+                  ref={imageRef}
+                  type="file"
+                  accept="image/*"
+                  name="image"
+                  id="image"
+                  onChange={imageFileChangeHandler} />
+                <Typography style={{ marginTop: 10 }} className={classes.heading}>الصورة الشخصية</Typography>
+              </Grid>
             </Grid>
-            <Grid item lg={6} md={6} xs={12}>
-              <Card className={classes.card}>
-                <CardContent className={classes.avatarContainer}>
-                  <Badge
-                    overlap="circle"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                    badgeContent={<EditRounded className={classes.avatarBadge} color="secondary" />}
-                    onClick={imageFileClickHandler}
-                  >
-                    <Avatar className={classes.avatar} alt="Travis Howard" src={form.profileImage} />
-                  </Badge>
-                  <input
-                    className={classes.imageFile}
-                    ref={imageRef}
-                    type="file"
-                    accept="image/*"
-                    name="image"
-                    id="image"
-                    onChange={imageFileChangeHandler} />
-                  <Typography style={{ marginTop: 10 }} className={classes.heading}>الصورة الشخصية</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" variant="contained" onClick={imageUploadButtonClickHandler}>حفظ</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
-        </Grid>
+          </CardContent>
+          <CardActions style={{ marginTop: -30 }}>
+            <Button color="primary" variant="contained" onClick={submitButtonClickHandler}>حفظ</Button>
+          </CardActions>
+        </Card>
       </Grid>
     </>
   );

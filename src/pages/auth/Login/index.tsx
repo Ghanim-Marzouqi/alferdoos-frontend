@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -37,6 +37,40 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const Login: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [form, setForm] = useState({ username: "", password: "", isRemembered: false });
+  const [errors, setErrors] = useState<{ error: string, errorMessage: string }[]>([]);
+
+  const isValidForm = (): boolean => {
+    let status = true;
+
+    if (form.username === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "username", errorMessage: "الرجاء إدخال أسم المستخدم" }]);
+      status = false;
+    }
+
+    if (form.password === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "password", errorMessage: "الرجاء إدخال كلمة المرور" }]);
+      status = false;
+    }
+
+    return status;
+  }
+
+  const showErrorMessage = (field: string): string => {
+    const error = errors.find(err => err.error === field);
+    if (error) return error.errorMessage;
+    else return "";
+  }
+
+  const submitButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
+    if (isValidForm()) {
+      setErrors([]);
+      console.log("submitted", form);
+      history.push("/admin");
+    }
+  }
 
   return (
     <>
@@ -55,33 +89,44 @@ const Login: React.FC = () => {
             variant="outlined"
             margin="normal"
             fullWidth
-            id="username"
+            size="small"
             label="أسم المستخدم"
             name="username"
-            autoComplete="username"
             autoFocus
+            error={errors.some(err => err.error === "username")}
+            helperText={showErrorMessage("username")}
+            onChange={e => {
+              setForm(prevForm => ({ ...prevForm, username: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "username"));
+            }}
           />
           <TextField
             variant="outlined"
             margin="normal"
             fullWidth
-            name="password"
+            size="small"
             label="كلمة المرور"
             type="password"
-            id="password"
-            autoComplete="current-password"
+            name="password"
+            error={errors.some(err => err.error === "password")}
+            helperText={showErrorMessage("password")}
+            onChange={e => {
+              setForm(prevForm => ({ ...prevForm, password: e.target.value as string }));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "password"));
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="تذكرني"
+            checked={form.isRemembered}
+            onChange={(e, checked) => setForm(prevForm => ({ ...prevForm, isRemembered: checked }))}
           />
           <Button
-            type="submit"
-            fullWidth
             variant="contained"
             color="primary"
+            fullWidth
             className={classes.submit}
-            onClick={() => history.push('/admin')}
+            onClick={submitButtonClickHandler}
           >
             تسجيل الدخول
           </Button>

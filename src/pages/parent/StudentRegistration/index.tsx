@@ -68,11 +68,11 @@ const StudentRegistration: React.FC = () => {
   }
 
   const handleNext = () => {
-    if (isFormValid()) {
+    if (isValidForm()) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
 
-    if (activeStep === steps.length - 1 && isFormValid()) {
+    if (activeStep === steps.length - 1 && isValidForm()) {
       submitForm();
     }
   };
@@ -81,7 +81,7 @@ const StudentRegistration: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const isFormValid = (): boolean => {
+  const isValidForm = (): boolean => {
     let status = true;
 
     if (activeStep === 0 && student.firstName === "") {
