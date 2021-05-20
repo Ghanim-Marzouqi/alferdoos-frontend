@@ -52,16 +52,32 @@ const StudentRegistration: React.FC = () => {
   const steps = ['البيانات الأساسية', 'بيانات المواد الدراسية', 'بيانات إضافية'];
   const [activeStep, setActiveStep] = useState<number>(0);
   const [student, setStudent] = useState<StudentDto>(INITIAL_STUDENT_DATA);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<{ error: string, errorMessage: string }[]>([]);
 
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <MainInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
+        return <MainInfoForm
+          student={student}
+          setStudent={setStudent}
+          errors={errors}
+          setErrors={setErrors}
+          showErrorMessage={showErrorMessage}
+        />;
       case 1:
-        return <SubjectInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
+        return <SubjectInfoForm
+          student={student}
+          setStudent={setStudent}
+          errors={errors}
+          setErrors={setErrors}
+          showErrorMessage={showErrorMessage} />;
       case 2:
-        return <AdditionalInfoForm student={student} setStudent={setStudent} errors={errors} setErrors={setErrors} />;
+        return <AdditionalInfoForm
+          student={student}
+          setStudent={setStudent}
+          errors={errors}
+          setErrors={setErrors}
+          showErrorMessage={showErrorMessage} />;
       default:
         return <Typography>خطوة غير معروفة</Typography>;
     }
@@ -81,71 +97,77 @@ const StudentRegistration: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const showErrorMessage = (field: string): string => {
+    const error = errors.find(err => err.error === field);
+    if (error) return error.errorMessage;
+    else return "";
+  }
+
   const isValidForm = (): boolean => {
     let status = true;
 
     if (activeStep === 0 && student.firstName === "") {
-      setErrors(prevErrors => [...prevErrors, "firstName"]);
+      setErrors(prevErrors => [...prevErrors, { error: "firstName", errorMessage: "الرجاء كتابة الأسم الأول" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.secondName === "") {
-      setErrors(prevErrors => [...prevErrors, "secondName"]);
+      setErrors(prevErrors => [...prevErrors, { error: "secondName", errorMessage: "الرجاء كتابة الأسم الثاني" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.thridName === "") {
-      setErrors(prevErrors => [...prevErrors, "thridName"]);
+      setErrors(prevErrors => [...prevErrors, { error: "thridName", errorMessage: "الرجاء كتابة الأسم الثالث" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.familyName === "") {
-      setErrors(prevErrors => [...prevErrors, "familyName"]);
+      setErrors(prevErrors => [...prevErrors, { error: "familyName", errorMessage: "الرجاء كتابة أسم العائلة" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.firstPhoneNumber === "") {
-      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      setErrors(prevErrors => [...prevErrors, { error: "firstPhoneNumber", errorMessage: "الرجاء كتابة رقم ولي الأمر الأول" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.firstPhoneNumber.length !== 8) {
-      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      setErrors(prevErrors => [...prevErrors, { error: "firstPhoneNumber", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (activeStep === 0 && (student.firstPhoneNumber.substr(0, 1) !== "7" && student.firstPhoneNumber.substr(0, 1) !== "9")) {
-      setErrors(prevErrors => [...prevErrors, "firstPhoneNumber"]);
+      setErrors(prevErrors => [...prevErrors, { error: "firstPhoneNumber", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.secondPhoneNumber !== "" && student.secondPhoneNumber.length !== 8) {
-      setErrors(prevErrors => [...prevErrors, "secondPhoneNumber"]);
+      setErrors(prevErrors => [...prevErrors, { error: "secondPhoneNumber", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (activeStep === 0 && student.secondPhoneNumber !== "" && (student.secondPhoneNumber.substr(0, 1) !== "7" && student.secondPhoneNumber.substr(0, 1) !== "9")) {
-      setErrors(prevErrors => [...prevErrors, "secondPhoneNumber"]);
+      setErrors(prevErrors => [...prevErrors, { error: "secondPhoneNumber", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (activeStep === 2 && student.isLearntInQuranCenter && student.quranCenterLocation === "") {
-      setErrors(prevErrors => [...prevErrors, "quranCenterLocation"]);
+      setErrors(prevErrors => [...prevErrors, { error: "quranCenterLocation", errorMessage: "الرجاء كتابة مكان أو موقع المركز" }]);
       status = false;
     }
 
     if (activeStep === 2 && !student.isHealthy && student.healthIssues === "") {
-      setErrors(prevErrors => [...prevErrors, "healthIssues"]);
+      setErrors(prevErrors => [...prevErrors, { error: "healthIssues", errorMessage: "الرجاء كتابة الأمراض أو الأعراض" }]);
       status = false;
     }
 
     if (activeStep === 2 && student.certificates.length < 1) {
-      setErrors(prevErrors => [...prevErrors, "certificates"]);
+      setErrors(prevErrors => [...prevErrors, { error: "certificates", errorMessage: "الرجاء إرفاق شهادات الطالب" }]);
       status = false;
     }
 
     if (activeStep === 2 && student.studentImage.name === "") {
-      setErrors(prevErrors => [...prevErrors, "studentImage"]);
+      setErrors(prevErrors => [...prevErrors, { error: "studentImage", errorMessage: "الرجاء إرفاق صورة الطالب" }]);
       status = false;
     }
 

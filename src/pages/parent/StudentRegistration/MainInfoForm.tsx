@@ -41,11 +41,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
   student: StudentDto;
   setStudent: React.Dispatch<React.SetStateAction<StudentDto>>;
-  errors: string[];
-  setErrors: React.Dispatch<React.SetStateAction<string[]>>;
+  errors: { error: string; errorMessage: string; }[];
+  setErrors: React.Dispatch<React.SetStateAction<{ error: string; errorMessage: string; }[]>>;
+  showErrorMessage: (field: string) => string;
 };
 
-const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors }) => {
+const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors, showErrorMessage }) => {
   const classes = useStyles();
 
   const villageChangeHandler = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
@@ -68,10 +69,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             label="الأسم الأول"
             name="firstName"
             value={student.firstName}
-            error={errors.some(err => err === "firstName")}
+            error={errors.some(err => err.error === "firstName")}
+            helperText={showErrorMessage("firstName")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, firstName: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "firstName"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "firstName"));
             }}
           />
         </Grid>
@@ -84,10 +86,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             label="الأسم الثاني"
             name="secondName"
             value={student.secondName}
-            error={errors.some(err => err === "secondName")}
+            error={errors.some(err => err.error === "secondName")}
+            helperText={showErrorMessage("secondName")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, secondName: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "secondName"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "secondName"));
             }}
           />
         </Grid>
@@ -100,10 +103,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             label="الأسم الثالث"
             name="thirdName"
             value={student.thridName}
-            error={errors.some(err => err === "thridName")}
+            error={errors.some(err => err.error === "thridName")}
+            helperText={showErrorMessage("thridName")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, thridName: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "thridName"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "thridName"));
             }}
           />
         </Grid>
@@ -116,10 +120,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             label="القبيلة"
             name="familyName"
             value={student.familyName}
-            error={errors.some(err => err === "familyName")}
+            error={errors.some(err => err.error === "familyName")}
+            helperText={showErrorMessage("familyName")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, familyName: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "familyName"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "familyName"));
             }}
           />
         </Grid>
@@ -146,10 +151,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             type="number"
             name="firstPhoneNumber"
             value={student.firstPhoneNumber}
-            error={errors.some(err => err === "firstPhoneNumber")}
+            error={errors.some(err => err.error === "firstPhoneNumber")}
+            helperText={showErrorMessage("firstPhoneNumber")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, firstPhoneNumber: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "firstPhoneNumber"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "firstPhoneNumber"));
             }}
           />
         </Grid>
@@ -163,10 +169,11 @@ const MainInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors 
             type="number"
             name="secondPhoneNumber"
             value={student.secondPhoneNumber}
-            error={errors.some(err => err === "secondPhoneNumber")}
+            error={errors.some(err => err.error === "secondPhoneNumber")}
+            helperText={showErrorMessage("secondPhoneNumber")}
             onChange={e => {
               setStudent(prevStudent => ({ ...prevStudent, secondPhoneNumber: e.target.value as string }));
-              setErrors(prevErrors => prevErrors.filter(err => err !== "secondPhoneNumber"));
+              setErrors(prevErrors => prevErrors.filter(err => err.error !== "secondPhoneNumber"));
             }}
           />
         </Grid>

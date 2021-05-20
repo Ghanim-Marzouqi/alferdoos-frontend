@@ -72,15 +72,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const Profile: React.FC = () => {
   const classes = useStyles();
   const imageRef = useRef<HTMLInputElement>(null);
+  const [image, setImage] = useState<string>(require("../../../assets/images/avatar.jpeg").default);
   const [form, setForm] = useState<UserDto>({
     name: "",
     email: "",
     phone: "",
     username: "",
-    profileImage: require("../../../assets/images/avatar.jpeg").default,
+    profileImage: new File([], ""),
     userType: USER_TYPE.ADMIN,
   });
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<{ error: string, errorMessage: string }[]>([]);
 
   const imageFileClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
@@ -94,14 +95,21 @@ const Profile: React.FC = () => {
     if (event.target.files !== null && typeof event.target.files !== "undefined") {
       const file = event.target.files[0];
       if (typeof file !== "undefined") {
-        setForm(preForm => ({ ...preForm, profileImage: URL.createObjectURL(file) }));
+        setImage(URL.createObjectURL(file));
+        setForm(prevForm => ({ ...prevForm, profileImage: file }));
       } else {
-        setForm(preForm => ({ ...preForm, profileImage: require("../../../assets/images/avatar.jpeg").default }));
+        setImage(require("../../../assets/images/avatar.jpeg").default);
       }
     } else {
-      setForm(preForm => ({ ...preForm, profileImage: require("../../../assets/images/avatar.jpeg").default }));
+      setImage(require("../../../assets/images/avatar.jpeg").default);
     }
   };
+
+  const showErrorMessage = (field: string): string => {
+    const error = errors.find(err => err.error === field);
+    if (error) return error.errorMessage;
+    else return "";
+  }
 
   const isValidEmail = (email: string): boolean => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -112,32 +120,37 @@ const Profile: React.FC = () => {
     let status = true;
 
     if (form.name === "") {
-      setErrors(prevErrors => [...prevErrors, "name"]);
+      setErrors(prevErrors => [...prevErrors, { error: "name", errorMessage: "الرجاء إدخال الأسم الثلاثي مع القبيلة" }]);
       status = false;
     }
 
     if (form.email === "") {
-      setErrors(prevErrors => [...prevErrors, "email"]);
+      setErrors(prevErrors => [...prevErrors, { error: "email", errorMessage: "الرجاء إدخال البريد الإلكتروني" }]);
       status = false;
     }
 
     if (!isValidEmail(form.email)) {
-      setErrors(prevErrors => [...prevErrors, "email"]);
+      setErrors(prevErrors => [...prevErrors, { error: "email", errorMessage: "البريد الإلكتروني غير صحيح" }]);
+      status = false;
+    }
+
+    if (form.phone === "") {
+      setErrors(prevErrors => [...prevErrors, { error: "phone", errorMessage: "الرجاء إدخال رقم الهاتف" }]);
       status = false;
     }
 
     if (form.phone.length !== 8) {
-      setErrors(prevErrors => [...prevErrors, "phone"]);
+      setErrors(prevErrors => [...prevErrors, { error: "phone", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (form.phone.substr(0, 1) !== "7" && form.phone.substr(0, 1) !== "9") {
-      setErrors(prevErrors => [...prevErrors, "phone"]);
+      setErrors(prevErrors => [...prevErrors, { error: "phone", errorMessage: "رقم الهاتف غير صحيح" }]);
       status = false;
     }
 
     if (form.username === "") {
-      setErrors(prevErrors => [...prevErrors, "username"]);
+      setErrors(prevErrors => [...prevErrors, { error: "username", errorMessage: "الرجاء إدخال أسم المستخدم" }]);
       status = false;
     }
 
@@ -171,10 +184,11 @@ const Profile: React.FC = () => {
                   autoFocus
                   label="الأسم"
                   name="name"
-                  error={errors.some(err => err === "name")}
+                  error={errors.some(err => err.error === "name")}
+                  helperText={showErrorMessage("name")}
                   onChange={e => {
                     setForm(prevForm => ({ ...prevForm, name: e.target.value as string }));
-                    setErrors(prevErrors => prevErrors.filter(err => err !== "name"));
+                    setErrors(prevErrors => prevErrors.filter(err => err.error !== "name"));
                   }}
                 />
                 <TextField
@@ -185,10 +199,11 @@ const Profile: React.FC = () => {
                   label="البريد الإلكتروني"
                   type="email"
                   name="email"
-                  error={errors.some(err => err === "email")}
+                  error={errors.some(err => err.error === "email")}
+                  helperText={showErrorMessage("email")}
                   onChange={e => {
                     setForm(prevForm => ({ ...prevForm, email: e.target.value as string }));
-                    setErrors(prevErrors => prevErrors.filter(err => err !== "email"));
+                    setErrors(prevErrors => prevErrors.filter(err => err.error !== "email"));
                   }}
                 />
                 <TextField
@@ -199,10 +214,11 @@ const Profile: React.FC = () => {
                   label="رقم الهاتف"
                   type="number"
                   name="phone"
-                  error={errors.some(err => err === "phone")}
+                  error={errors.some(err => err.error === "phone")}
+                  helperText={showErrorMessage("phone")}
                   onChange={e => {
                     setForm(prevForm => ({ ...prevForm, phone: e.target.value as string }));
-                    setErrors(prevErrors => prevErrors.filter(err => err !== "phone"));
+                    setErrors(prevErrors => prevErrors.filter(err => err.error !== "phone"));
                   }}
                 />
                 <TextField
@@ -212,10 +228,11 @@ const Profile: React.FC = () => {
                   fullWidth
                   label="آسم المستخدم"
                   name="username"
-                  error={errors.some(err => err === "username")}
+                  error={errors.some(err => err.error === "username")}
+                  helperText={showErrorMessage("username")}
                   onChange={e => {
                     setForm(prevForm => ({ ...prevForm, username: e.target.value as string }));
-                    setErrors(prevErrors => prevErrors.filter(err => err !== "username"));
+                    setErrors(prevErrors => prevErrors.filter(err => err.error !== "username"));
                   }}
                 />
                 <FormControl className={classes.formControl} variant="outlined" size="small">
@@ -233,7 +250,7 @@ const Profile: React.FC = () => {
                   badgeContent={<EditRounded className={classes.avatarBadge} color="secondary" />}
                   onClick={imageFileClickHandler}
                 >
-                  <Avatar className={classes.avatar} alt="Travis Howard" src={form.profileImage} />
+                  <Avatar className={classes.avatar} alt="User Profile" src={image} />
                 </Badge>
                 <input
                   className={classes.imageFile}
@@ -247,7 +264,7 @@ const Profile: React.FC = () => {
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions style={{ marginTop: -30 }}>
+          <CardActions>
             <Button color="primary" variant="contained" onClick={submitButtonClickHandler}>حفظ</Button>
           </CardActions>
         </Card>

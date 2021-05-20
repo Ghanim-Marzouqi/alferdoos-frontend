@@ -92,11 +92,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
   student: StudentDto;
   setStudent: React.Dispatch<React.SetStateAction<StudentDto>>;
-  errors: string[];
-  setErrors: React.Dispatch<React.SetStateAction<string[]>>;
+  errors: { error: string; errorMessage: string; }[];
+  setErrors: React.Dispatch<React.SetStateAction<{ error: string; errorMessage: string; }[]>>;
+  showErrorMessage: (field: string) => string;
 };
 
-const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors }) => {
+const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setErrors, showErrorMessage }) => {
   const classes = useStyles();
   const imageRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<string>(require("../../../assets/images/avatar.jpeg").default);
@@ -115,7 +116,7 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
       if (typeof file !== "undefined") {
         setImage(URL.createObjectURL(file));
         setStudent(prevStudent => ({ ...prevStudent, studentImage: file }));
-        setErrors(prevErrors => prevErrors.filter(err => err !== "studentImage"));
+        setErrors(prevErrors => prevErrors.filter(err => err.error !== "studentImage"));
       } else {
         setImage(require("../../../assets/images/avatar.jpeg").default);
       }
@@ -130,7 +131,7 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
       console.log(attachments);
       if (attachments.length > 0) {
         setStudent(prevStudent => ({ ...prevStudent, certificates: attachments }));
-        setErrors(prevErrors => prevErrors.filter(err => err !== "certificates"));
+        setErrors(prevErrors => prevErrors.filter(err => err.error !== "certificates"));
       }
     }
   }
@@ -161,10 +162,11 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
               label="موقع أو مكان المركز"
               name="quranCenterLocation"
               value={student.quranCenterLocation}
-              error={errors.some(err => err === "quranCenterLocation")}
+              error={errors.some(err => err.error === "quranCenterLocation")}
+              helperText={showErrorMessage("quranCenterLocation")}
               onChange={e => {
                 setStudent(prevStudent => ({ ...prevStudent, quranCenterLocation: e.target.value as string }));
-                setErrors(prevErrors => prevErrors.filter(err => err !== "quranCenterLocation"));
+                setErrors(prevErrors => prevErrors.filter(err => err.error !== "quranCenterLocation"));
               }}
             />
           }
@@ -197,10 +199,11 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
               label="وصف الأمراض أو الأعراض"
               name="healthIssues"
               value={student.healthIssues}
-              error={errors.some(err => err === "healthIssues")}
+              error={errors.some(err => err.error === "healthIssues")}
+              helperText={showErrorMessage("healthIssues")}
               onChange={e => {
                 setStudent(prevStudent => ({ ...prevStudent, healthIssues: e.target.value as string }));
-                setErrors(prevErrors => prevErrors.filter(err => err !== "healthIssues"));
+                setErrors(prevErrors => prevErrors.filter(err => err.error !== "healthIssues"));
               }}
             />
           }
@@ -230,7 +233,8 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
                   )
                 }}
                 value={getAttachments(student.certificates)}
-                error={errors.some(err => err === "certificates")}
+                error={errors.some(err => err.error === "certificates")}
+                helperText={showErrorMessage("certificates")}
               />
             </label>
           </div>
@@ -242,7 +246,7 @@ const AdditionalInfoForm: React.FC<Props> = ({ student, setStudent, errors, setE
             badgeContent={<EditRounded className={classes.avatarBadge} color="secondary" />}
             onClick={imageFileClickHandler}
           >
-            <Avatar className={errors.some(err => err === "studentImage") ? clsx(classes.avatar, classes.errorImage) : clsx(classes.avatar, classes.infoImage)} alt="Student Image" src={image} />
+            <Avatar className={errors.some(err => err.error === "studentImage") ? clsx(classes.avatar, classes.errorImage) : clsx(classes.avatar, classes.infoImage)} alt="Student Image" src={image} />
           </Badge>
           <input
             className={classes.imageFile}

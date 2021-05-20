@@ -7,6 +7,6 @@ export default interface UserDto {
   email: string;
   phone: string;
   username: string;
-  profileImage: string;
+  profileImage: File;
   userType: USER_TYPE;
 }
