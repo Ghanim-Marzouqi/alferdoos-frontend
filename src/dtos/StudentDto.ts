@@ -7,7 +7,6 @@ export default interface StudentDto {
   secondName: string;
   thridName: string;
   familyName: string;
-  fullname: string;
   finishedGrade: string;
   firstPhoneNumber: string;
   secondPhoneNumber: string;

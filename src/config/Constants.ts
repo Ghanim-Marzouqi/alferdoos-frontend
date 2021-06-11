@@ -5,3 +5,10 @@ export enum USER_TYPE {
   TEACHER = "TEACHER",
   PARENT = "PARENT"
 };
+export enum STUDENT_STATUS {
+  REVIEW = "REVIEW",
+  EXAM = "EXAM",
+  STUDY = "STUDY",
+  REJECT = "REJECT",
+  WITHDRAW = "WITHDRAW"
+};
